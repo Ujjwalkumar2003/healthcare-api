@@ -11,7 +11,7 @@ const logoutRoute = require("./routes/logoutRoute");
 const cors = require("cors");
 const app = express();
 
-dotenv.config({ path: "./config.env" });
+dotenv.config();
 
 app.use(cors());
 app.use(express.static("public"));
@@ -25,11 +25,11 @@ mongoose.set('strictQuery', true)
 mongoose
   .connect(dbURI)
   .then((result) => {
-    app.listen(port);
-    console.log("connected to db and listening at port 5000");
+    
+    console.log("connected to db");
   })
   .catch((err) => {
-    app.listen(port);
+    
     app.get("/", (req, res) => {
       res.send(
         "Something Went Wrong! Please Try again after some time, if problem persists please contact us."
@@ -37,7 +37,7 @@ mongoose
     });
   });
 
-app.get("/", (req, res) => res.send("server listening at 5000 port!"));
+app.get("/", (req, res) => res.send("server listening at port!"));
  
 app.use(authRoutes);
 app.use(registerRoute);
@@ -56,10 +56,13 @@ app.use(logoutRoute);
 //   });
 // }
  
-if (process.env.NODE_ENV == "production") {
-  app.use(express.static("client/build"));
-  const path = require("path");
-  app.get("*", function (req, res) {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
+// if (process.env.NODE_ENV == "production") {
+//   app.use(express.static("client/build"));
+//   const path = require("path");
+//   app.get("*", function (req, res) {
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//   });
+// }
+app.listen(port,()=>{
+  console.log(`Server runing on port ${port}`)
+})
